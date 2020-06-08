@@ -24,7 +24,7 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
 
-        List<UserMealWithExcess> mealsTo = filteredWithExceeded(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        List<UserMealWithExcess> mealsTo = filteredByStreamInOneReturn(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         mealsTo.forEach(System.out::println);
 
 //        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
@@ -94,5 +94,28 @@ public class UserMealsUtil {
         }
 
         return list;
+    }
+
+    public static List<UserMealWithExcess> filteredByStreamInOneReturn(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        return meals
+                .stream()
+                .collect(Collectors.groupingBy(um -> um.getDateTime().toLocalDate()))
+                .values()
+                .stream()
+                .flatMap(dayMeals -> {
+                    boolean exceed = dayMeals.stream().mapToInt(UserMeal::getCalories).sum() > caloriesPerDay;
+                    return dayMeals.stream().filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+                            .map(meal -> createWithExceed(meal, exceed));
+                })
+                .collect(Collectors.toList());
+    }
+
+    private static UserMealWithExcess createWithExceed(UserMeal meal, boolean exceed) {
+        return new UserMealWithExcess(
+                meal.getDateTime(),
+                meal.getDescription(),
+                meal.getCalories(),
+                exceed
+        );
     }
 }
