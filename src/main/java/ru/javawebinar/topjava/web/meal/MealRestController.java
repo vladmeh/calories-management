@@ -52,4 +52,9 @@ public class MealRestController {
         service.update(getUserId(), meal);
     }
 
+    public void delete(int id) {
+        log.info("delete {} for user {}", id, getUserId());
+        service.delete(getUserId(), id);
+    }
+
 }
