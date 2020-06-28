@@ -1,3 +1,6 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/791a25069e4b4507be68041659899089)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vladmeh/calories-management&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/vladmeh/calories-management.svg?branch=master)](https://travis-ci.org/vladmeh/calories-management)
+
 Java Enterprise Online Project
 ===============================
 
